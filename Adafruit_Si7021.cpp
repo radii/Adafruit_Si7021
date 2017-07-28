@@ -74,7 +74,14 @@ float Adafruit_Si7021::readTemperature(void) {
   Wire.endTransmission(false);
   delay(25);
 
-  Wire.requestFrom(_i2caddr, 3);
+  int n = Wire.requestFrom(_i2caddr, 3);
+
+  if (n != 3) {
+      Serial.print("Unable to read from i2c, requestFrom returned ");
+      Serial.println(n);
+      return -9999999;
+  }
+
   uint16_t temp = Wire.read();
   temp <<= 8;
   temp |= Wire.read();
